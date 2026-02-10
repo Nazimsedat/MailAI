@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mailler</title>
+</head>
+<meta charset="UTF-8">
+<body>
+
+<h2>Gelen Mailler</h2>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Kimden</th>
+        <th>Konu</th>
+        <th>Tarih</th>
+    </tr>
+
+    {% for mail in messages %}
+    <tr>
+        <td>{{ mail.from }}</td>
+        <td>{{ mail.subject }}</td>
+        <td>{{mail.body}}</td>
+        <td>{{ mail.received }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>
