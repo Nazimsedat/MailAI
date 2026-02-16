@@ -12,7 +12,7 @@ SCOPES = ["User.Read","Mail.Read"]
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 
-@auth_bp.route("/")
+@auth_bp.route("/loginmicrosoft")
 def index():
     auth_url = msal_app.get_authorization_request_url(
         scopes=SCOPES,

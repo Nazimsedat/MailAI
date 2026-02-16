@@ -3,6 +3,10 @@ from services.mail_service import get_all_mails
 
 mail_bp = Blueprint("mail",__name__)
 
+@mail_bp.route("/")
+def index():
+    return render_template("index.html")
+
 @mail_bp.route("/mails")
 def mails():
     token = session.get("access_token")
