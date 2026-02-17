@@ -2,28 +2,37 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Mailler</title>
+    <title>Gelen Mailler</title>
 </head>
-<meta charset="UTF-8">
 <body>
 
 <h2>Gelen Mailler</h2>
 
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Kimden</th>
-        <th>Konu</th>
-        <th>Tarih</th>
-    </tr>
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    
+    <thead>
+        <tr>
+            <th align="left">Kimden</th>
+            <th align="left">Konu</th>
+            <th align="left">Tarih</th>
+        </tr>
+    </thead>
 
-    {% for mail in messages %}
-    <tr>
-        <td>{{ mail.from }}</td>
-        <td>{{ mail.subject }}</td>
-        <td>{{mail.body}}</td>
-        <td>{{ mail.received }}</td>
-    </tr>
-    {% endfor %}
+    <tbody>
+        {% for mail in messages %}
+        <tr>
+            <td>{{ mail.from }}</td>
+
+            <td>
+                <a href="{{ url_for('mail.mail_detail', mail_id=mail.id) }}">
+                    {{ mail.subject }}
+                </a>
+            </td>
+
+            <td>{{ mail.receivedDateTime }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 
 </table>
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ mail.subject }}</title>
+</head>
+<body>
+
+<h2>{{ mail.subject }}</h2>
+
+<p><strong>Kimden:</strong> {{ mail.from.emailAddress.address }}</p>
+<p><strong>Tarih:</strong> {{ mail.receivedDateTime }}</p>
+{% for att in mail.attachments %}
+    <li>
+        <form method="POST" action="{{ url_for('mail.download_attachment', mail_id=mail.id, attachment_id=att.id) }}">
+            <button type="submit">{{ att.name }}</button>
+        </form>
+    </li>
+{% endfor %}
+<hr>
+
+<div>
+    {{ mail.body.content | safe }}
+</div>
+ <form method="POST">
+    <label>Mesaj:</label><br>
+    <textarea name="body" rows="6" cols="50" placeholder="Mesajınızı yazın..."></textarea>
+    <br>
+    <button type="submit">Gönder</button>
+</form>
+<br>
+<a href="{{ url_for('mail.mails') }}">← Geri Dön</a>
+
+</body>
+</html>
