@@ -1,40 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Gelen Mailler</title>
+    <title>MailAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mails.css') }}">
 </head>
 <body>
 
-<h2>Gelen Mailler</h2>
+<div class="layout">
 
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-    
-    <thead>
-        <tr>
-            <th align="left">Kimden</th>
-            <th align="left">Konu</th>
-            <th align="left">Tarih</th>
-        </tr>
-    </thead>
+    <!-- SOL SIDEBAR -->
+    <aside class="sidebar">
+        <h2>MailAI</h2>
+        <button>📥 Gelen Kutusu</button>
+        <button>⭐ Önemli</button>
+        <button>⚙ Ayarlar</button>
+    </aside>
 
-    <tbody>
-        {% for mail in messages %}
-        <tr>
-            <td>{{ mail.from }}</td>
 
-            <td>
-                <a href="{{ url_for('mail.mail_detail', mail_id=mail.id) }}">
-                    {{ mail.subject }}
-                </a>
-            </td>
+    <!-- ORTA: AI YORUM PANELİ -->
+    <main class="ai-panel">
+        <div class="ai-header">
+            <h2>🤖 Yapay Zeka Yorumu</h2>
+            <button class="ai-btn">Otomatik Özetle</button>
+        </div>
 
-            <td>{{ mail.receivedDateTime }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+        <div class="ai-content">
+            {% if AI_prompt %}
+                {{ AI_prompt|safe }}
+            {% else %}
+                <p>Henüz analiz yapılmadı.</p>
+            {% endif %}
+        </div>
+    </main>
 
-</table>
+
+    <!-- SAĞ: MAILBOX -->
+    <aside class="mailbox">
+
+        <h3>📨 Mailbox</h3>
+
+        <div class="mail-list">
+            {% for mail in messages %}
+            <div class="mail-item">
+                <div class="mail-from">{{ mail.from }}</div>
+                <div class="mail-subject">
+                    <a href="{{ url_for('mail.mail_detail', mail_id=mail.id) }}">
+                        {{ mail.subject }}
+                    </a>
+                </div>
+                <div class="mail-date">{{ mail.receivedDateTime }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </aside>
+
+</div>
 
 </body>
 </html>

@@ -22,7 +22,7 @@ def mails():
     print(ai_prompt_mails)
     AI_prompt = gemini_service.today_all_mails(ai_prompt_mails)
     print(AI_prompt)
-    return render_template("mails.html",messages=messages,ai_prompt_mails=ai_prompt_mails)
+    return render_template("mails.html",messages=messages,ai_prompt_mails=ai_prompt_mails,AI_prompt=AI_prompt)
 
 @mail_bp.route("/mail/<string:mail_id>")
 def mail_detail(mail_id):

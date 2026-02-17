@@ -24,7 +24,16 @@ class GeminiService:
     
     def today_all_mails(self,mails_all:str)->str:
         promt = f"""
-        Bugün gelen maillerden önemli olanları seç ve bana özetle. Maillerin içeriği aşağıda verilmiştir:
+        Bugün gelen maillerden önemli olanları seç ve bana özetle. Markdown eklemeden, yaptığın özeti HTML formatında ver. akış şablonu olarak BAŞLIK:
+...
+
+ÖZET:
+...
+
+ÖNEMLİ NOKTALAR:
+- ...
+- ...
+- ... bu şablonu kullan.Başlıkları kalın yaz. Maillerin içeriği aşağıda verilmiştir:
         {mails_all}
         """
         response = self.model.generate_content(promt)
