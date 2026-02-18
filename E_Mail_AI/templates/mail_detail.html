@@ -1,35 +1,62 @@
-<!DOCTYPE html>
-<html>
 <head>
-    <meta charset="UTF-8">
-    <title>{{ mail.subject }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mail_detail.css') }}">
 </head>
-<body>
 
-<h2>{{ mail.subject }}</h2>
+<div class="mail-container">
 
-<p><strong>Kimden:</strong> {{ mail.from.emailAddress.address }}</p>
-<p><strong>Tarih:</strong> {{ mail.receivedDateTime }}</p>
-{% for att in mail.attachments %}
-    <li>
-        <form method="POST" action="{{ url_for('mail.download_attachment', mail_id=mail.id, attachment_id=att.id) }}">
-            <button type="submit">{{ att.name }}</button>
-        </form>
-    </li>
-{% endfor %}
-<hr>
+    <h2 class="mail-title">{{ mail.subject }}</h2>
 
-<div>
-    {{ mail.body.content | safe }}
+    <div class="mail-meta">
+        <p><strong>Kimden:</strong> {{ mail.from.emailAddress.address }}</p>
+        <p><strong>Tarih:</strong> {{ mail.receivedDateTime }}</p>
+    </div>
+
+    <div class="mail-body">
+        {{ mail.body.content | safe }}
+    </div>
+
+    {% if mail.attachments %}
+    <div class="attachments">
+        <h3>Ekler</h3>
+        {% for att in mail.attachments %}
+        <div class="attachment-item">
+            <form method="POST"
+                  action="{{ url_for('mail.download_attachment', mail_id=mail.id, attachment_id=att.id) }}">
+                <button type="submit">{{ att.name }}</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="chat-container">
+
+    <div class="chat-header">
+        🤖 MailAI Asistan
+    </div>
+
+    <div class="chat-messages">
+        {% for msg in chat_history %}
+            <div class="chat-row {{ msg.role }}">
+                <div class="chat-bubble">
+                    {{ msg.content }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="chat-input-area">
+        <input type="hidden" name="action" value="ai_chat">
+        <textarea name="user_message"
+                  placeholder="Bu mail hakkında soru sor..."
+                  required></textarea>
+        <button type="submit">Gönder</button>
+    </form>
+
 </div>
- <form method="POST">
-    <label>Mesaj:</label><br>
-    <textarea name="body" rows="6" cols="50" placeholder="Mesajınızı yazın..."></textarea>
-    <br>
-    <button type="submit">Gönder</button>
-</form>
-<br>
-<a href="{{ url_for('mail.mails') }}">← Geri Dön</a>
 
-</body>
-</html>
+
+
+    <a href="{{ url_for('mail.mails') }}" class="back-link">← Geri Dön</a>
+
+</div>

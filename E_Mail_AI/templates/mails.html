@@ -21,8 +21,12 @@
     <!-- ORTA: AI YORUM PANELİ -->
     <main class="ai-panel">
         <div class="ai-header">
-            <h2>🤖 Yapay Zeka Yorumu</h2>
-            <button class="ai-btn">Otomatik Özetle</button>
+            <h2>Yapay Zeka Yorumu</h2>
+            <form method="POST">
+                <button type="submit" class="ai-btn">
+                    Otomatik Özetle
+                </button>
+            </form>
         </div>
 
         <div class="ai-content">
@@ -38,7 +42,7 @@
     <!-- SAĞ: MAILBOX -->
     <aside class="mailbox">
 
-        <h3>📨 Mailbox</h3>
+        <h3> Mailbox</h3>
 
         <div class="mail-list">
             {% for mail in messages %}

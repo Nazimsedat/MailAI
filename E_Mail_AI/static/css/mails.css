@@ -1,7 +1,7 @@
 :root {
-    --primary: #c81e1e;
-    --primary-dark: #991b1b;
-    --soft-red: #fee2e2;
+    --primary: #1e68c8;
+    --primary-dark: #1b4599;
+    --soft-red: #e2f0fe;
     --bg: #fff5f5;
     --white: #ffffff;
     --text-dark: #1f2937;
@@ -110,7 +110,7 @@ body {
 }
 
 .mail-item:hover {
-    background: #fecaca;
+    background: #cae4fe;
 }
 
 .mail-from {
