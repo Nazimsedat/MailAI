@@ -16,13 +16,13 @@ def get_all_mails(token):
 
             for mail in data.get("value",[]):
                   mails.append({
-                    "id": mail["id"],
-                    "from": mail["from"]["emailAddress"]["address"],
-                    "subject": mail["subject"],
-                    "body": mail["bodyPreview"],
-                    "received": mail["receivedDateTime"]
+                    "id": mail.get("id"),
+                    "from": mail.get("from", {}).get("emailAddress", {}).get("address"),
+                    "subject": mail.get("subject"),
+                    "body": mail.get("bodyPreview"),
+                    "received": mail.get("receivedDateTime")
                   })
-            urtlink = data.get("@odata.nextlink")
+            url = data.get("@odata.nextlink")
 
             return mails
 
@@ -40,9 +40,10 @@ def AI_Prompt_mail(token):
 
       for mail in data.get("value", []):
             mails.append({
-                "from": mail["from"]["emailAddress"]["address"],
-                "subject": mail["subject"],
-                "received": mail["receivedDateTime"]
+                "from": mail.get("from", {}).get("emailAddress", {}).get("address"),
+                "subject": mail.get("subject"),
+                "body": mail.get("body", {}).get("content"),
+                "received": mail.get("receivedDateTime")
             })
       return mails
 
