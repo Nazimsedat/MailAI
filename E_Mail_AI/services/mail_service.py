@@ -46,5 +46,6 @@ def AI_Prompt_mail(token):
                 "received": mail.get("receivedDateTime")
             })
       return mails
+      print(mails)
 
 

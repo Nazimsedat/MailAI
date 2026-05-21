@@ -2,15 +2,14 @@ import base64
 from io import BytesIO
 from flask import Blueprint, send_file, session, redirect, url_for, render_template
 from services.mail_service import get_all_mails,AI_Prompt_mail
-from services.AI_service import GeminiService
+from services.AI_service import SisAIService
 import requests
 from flask import request
 import json
 from bs4 import BeautifulSoup
 
 mail_bp = Blueprint("mail",__name__)
-gemini_service = GeminiService()
-
+ai_service = SisAIService()
 
 @mail_bp.route("/")
 def index():
@@ -22,13 +21,46 @@ def mails():
     token = session.get("access_token")
     if not token:
         return redirect(url_for("auth.index"))
-    AI_prompt = None
+    AI_prompt = session.get("mails_summary")
     messages = get_all_mails(token)
     ai_prompt_mails = AI_Prompt_mail(token)
+
+    if "mails_chat_history" not in session:
+        session["mails_chat_history"] = []
+
     if request.method == "POST":
-        AI_prompt = gemini_service.today_all_mails(ai_prompt_mails)
+        action = request.form.get("action")
+
+        if action == "summary":
+            AI_prompt = ai_service.today_all_mails(ai_prompt_mails)
+            session["mails_summary"] = AI_prompt
+            session.modified = True
+
+        if action == "mails_chat":
+            user_message = request.form.get("user_message")
+
+            if user_message:
+                session["mails_chat_history"].append({
+                    "role": "user",
+                    "content": user_message
+                })
+
+                ai_response = ai_service.ask_about_mails(ai_prompt_mails, user_message)
+
+                session["mails_chat_history"].append({
+                    "role": "ai",
+                    "content": ai_response
+                })
+
+                session.modified = True
         
-    return render_template("mails.html",messages=messages,ai_prompt_mails=ai_prompt_mails,AI_prompt=AI_prompt)
+    return render_template(
+        "mails.html",
+        messages=messages,
+        ai_prompt_mails=ai_prompt_mails,
+        AI_prompt=AI_prompt,
+        mails_chat_history=session.get("mails_chat_history", [])
+    )
 
 
 @mail_bp.route("/mail/<string:mail_id>", methods=["POST", "GET"])
@@ -79,7 +111,7 @@ def mail_detail(mail_id):
             {user_message}
             """
 
-            ai_response = gemini_service.ask_about_mail(soup,user_message)
+            ai_response = ai_service.ask_about_mail(clean_body,user_message)
 
             # AI cevabını ekle
             session["chat_history"].append({

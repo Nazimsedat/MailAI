@@ -1,7 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <body>
-        <h1>Merhaba</h1>
-        <a href="http://localhost:5000/loginmicrosoft">Microsoft İle Giriş Yap</a>
-    </body>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisMail | Giriş</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <main class="login-shell">
+        <section class="hero-copy" aria-label="SisMail giriş alanı">
+            <img class="product-logo" src="{{ url_for('static', filename='img/sistekno/logo.svg') }}" alt="SisTekno">
+            <h1>Mailleriniz ile konuşun</h1>
+            <p>
+                Gelen kutunuzu SisAI ile özetleyin, önemli mesajları yakalayın ve
+                e-postalarınıza doğal dilde soru sorun.
+            </p>
+
+            <a class="microsoft-button" href="{{ url_for('auth.index') }}">
+                <span class="microsoft-logo" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <span>Microsoft ile devam et</span>
+            </a>
+
+            <div class="micro-copy">
+                <span>Microsoft 365 ile güvenli giriş</span>
+                <span>Yerel SisAI desteği</span>
+            </div>
+        </section>
+
+        <section class="preview-card" aria-label="SisMail önizleme">
+            <div class="preview-top">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="mail-row">
+                <div>
+                    <strong>Satın alma talebi</strong>
+                    <span>3 mail içinde öne çıkan konu bulundu</span>
+                </div>
+                <b>Yeni</b>
+            </div>
+
+            <div class="assistant-box">
+                <small>SisAI cevabı</small>
+                <p>Bugün gelen maillerde teklif onayı, toplantı planı ve ödeme hatırlatması öne çıkıyor.</p>
+            </div>
+
+            <div class="prompt-pill">Bu mail ne hakkında?</div>
+        </section>
+    </main>
+</body>
 </html>

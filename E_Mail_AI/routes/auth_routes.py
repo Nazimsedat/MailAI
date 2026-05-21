@@ -11,6 +11,12 @@ msal_app = msal_client.get_msal_app()
 SCOPES = ["User.Read","Mail.Read"]
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
+VOLATILE_SESSION_KEYS = (
+    "mails_summary",
+    "mails_chat_history",
+    "chat_history",
+)
+
 
 @auth_bp.route("/loginmicrosoft")
 def index():
@@ -36,6 +42,9 @@ def callback():
     if "access_token" not in result:
         return jsonify(result),400
     
+    for key in VOLATILE_SESSION_KEYS:
+        session.pop(key, None)
+
     session["access_token"] = result["access_token"]
     return redirect(url_for("mail.mails"))
 

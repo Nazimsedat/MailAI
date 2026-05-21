@@ -1,62 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisTekno MailAI | Mail Detayı</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mail_detail.css') }}">
+    <script>
+        document.documentElement.dataset.theme = localStorage.getItem("mailai-theme") || "light";
+    </script>
 </head>
-
-<div class="mail-container">
-
-    <h2 class="mail-title">{{ mail.subject }}</h2>
-
-    <div class="mail-meta">
-        <p><strong>Kimden:</strong> {{ mail.from.emailAddress.address }}</p>
-        <p><strong>Tarih:</strong> {{ mail.receivedDateTime }}</p>
-    </div>
-
-    <div class="mail-body">
-        {{ mail.body.content | safe }}
-    </div>
-
-    {% if mail.attachments %}
-    <div class="attachments">
-        <h3>Ekler</h3>
-        {% for att in mail.attachments %}
-        <div class="attachment-item">
-            <form method="POST"
-                  action="{{ url_for('mail.download_attachment', mail_id=mail.id, attachment_id=att.id) }}">
-                <button type="submit">{{ att.name }}</button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <div class="chat-container">
-
-    <div class="chat-header">
-        🤖 MailAI Asistan
-    </div>
-
-    <div class="chat-messages">
-        {% for msg in chat_history %}
-            <div class="chat-row {{ msg.role }}">
-                <div class="chat-bubble">
-                    {{ msg.content }}
-                </div>
+<body>
+    <main class="mail-container">
+        <header class="page-header">
+            <a href="{{ url_for('mail.mails') }}" class="back-link">Geri Dön</a>
+            <div class="brand">
+                <img src="{{ url_for('static', filename='img/sistekno/logo.svg') }}" alt="SisTekno">
+                <span>MailAI</span>
             </div>
-        {% endfor %}
-    </div>
+            <button id="themeButton" class="theme-button" type="button">Karanlık Tema</button>
+        </header>
 
-    <form method="POST" class="chat-input-area">
-        <input type="hidden" name="action" value="ai_chat">
-        <textarea name="user_message"
-                  placeholder="Bu mail hakkında soru sor..."
-                  required></textarea>
-        <button type="submit">Gönder</button>
-    </form>
+        <section class="mail-card">
+            <p class="section-kicker">Mail detayı</p>
+            <h1 class="mail-title">{{ mail.subject }}</h1>
 
-</div>
+            <div class="mail-meta">
+                <p><strong>Kimden:</strong> {{ mail.from.emailAddress.address }}</p>
+                <p><strong>Tarih:</strong> {{ mail.receivedDateTime }}</p>
+            </div>
 
+            <div class="mail-body">
+                {{ mail.body.content | safe }}
+            </div>
+        </section>
 
+        {% if mail.attachments %}
+            <section class="attachments">
+                <h2>Ekler</h2>
+                {% for att in mail.attachments %}
+                    <div class="attachment-item">
+                        <form method="POST"
+                              action="{{ url_for('mail.download_attachment', mail_id=mail.id, attachment_id=att.id) }}">
+                            <button type="submit">{{ att.name }}</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
 
-    <a href="{{ url_for('mail.mails') }}" class="back-link">← Geri Dön</a>
+        <section class="chat-container">
+            <div class="chat-header">MailAI Asistan</div>
 
-</div>
+            <div class="chat-messages">
+                {% for msg in chat_history %}
+                    <div class="chat-row {{ msg.role }}">
+                        <div class="chat-bubble" data-animate-ai="{{ 'true' if loop.last and msg.role == 'ai' else 'false' }}">
+                            {{ msg.content }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form method="POST" class="chat-input-area">
+                <input type="hidden" name="action" value="ai_chat">
+                <textarea name="user_message"
+                          placeholder="Bu mail hakkında soru sor..."
+                          required></textarea>
+                <button type="submit">Gönder</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const themeButton = document.getElementById("themeButton");
+
+        function syncThemeButton() {
+            const theme = localStorage.getItem("mailai-theme") || "light";
+            themeButton.textContent = theme === "dark" ? "Aydınlık Tema" : "Karanlık Tema";
+        }
+
+        syncThemeButton();
+
+        themeButton.addEventListener("click", () => {
+            const currentTheme = localStorage.getItem("mailai-theme") || "light";
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.dataset.theme = nextTheme;
+            localStorage.setItem("mailai-theme", nextTheme);
+            syncThemeButton();
+        });
+
+        function scrollChatToBottom(chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function typeAiMessage(bubble) {
+            const message = bubble.textContent.trim();
+
+            if (!message) {
+                return;
+            }
+
+            bubble.textContent = "";
+            bubble.classList.add("is-typing");
+
+            let index = 0;
+            const speed = 18;
+
+            function writeNextCharacter() {
+                bubble.textContent += message.charAt(index);
+                index += 1;
+                scrollChatToBottom(bubble.closest(".chat-messages"));
+
+                if (index < message.length) {
+                    window.setTimeout(writeNextCharacter, speed);
+                } else {
+                    bubble.classList.remove("is-typing");
+                }
+            }
+
+            writeNextCharacter();
+        }
+
+        function createTypingIndicator() {
+            const row = document.createElement("div");
+            row.className = "chat-row ai pending-ai";
+            row.innerHTML = `
+                <div class="chat-bubble typing-indicator" aria-label="MailAI cevap hazırlıyor">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            return row;
+        }
+
+        const chatMessages = document.querySelector(".chat-messages");
+        const chatForm = document.querySelector(".chat-input-area");
+        const latestAiBubble = document.querySelector('[data-animate-ai="true"]');
+
+        if (chatMessages) {
+            scrollChatToBottom(chatMessages);
+        }
+
+        if (latestAiBubble) {
+            typeAiMessage(latestAiBubble);
+        }
+
+        if (chatForm && chatMessages) {
+            chatForm.addEventListener("submit", (event) => {
+                if (!chatForm.checkValidity()) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const textarea = chatForm.querySelector("textarea");
+                const button = chatForm.querySelector("button");
+                const message = textarea.value.trim();
+
+                if (message) {
+                    const userRow = document.createElement("div");
+                    userRow.className = "chat-row user";
+                    userRow.innerHTML = `<div class="chat-bubble"></div>`;
+                    userRow.querySelector(".chat-bubble").textContent = message;
+                    chatMessages.append(userRow, createTypingIndicator());
+                    scrollChatToBottom(chatMessages);
+                }
+
+                textarea.readOnly = true;
+                button.disabled = true;
+                button.textContent = "Yazıyor...";
+
+                window.setTimeout(() => chatForm.submit(), 120);
+            });
+        }
+    </script>
+</body>
+</html>

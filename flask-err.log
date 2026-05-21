@@ -1,0 +1,117 @@
+Traceback (most recent call last):
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+PermissionError: [WinError 10013] Eriþim izinlerince izin verilmeyen bir þekilde bir yuvaya eriþilmeye çalýþýldý
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 753, in connect
+    self.sock = sock = self._new_conn()
+                       ~~~~~~~~~~~~~~^^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x000001F43F76EFD0>: Failed to establish a new connection: [WinError 10013] Eriþim izinlerince izin verilmeyen bir þekilde bir yuvaya eriþilmeye çalýþýldý
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='login.microsoftonline.com', port=443): Max retries exceeded with url: /a79d2309-5562-4deb-b093-cc8560bc3215/v2.0/.well-known/openid-configuration (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001F43F76EFD0>: Failed to establish a new connection: [WinError 10013] Eriþim izinlerince izin verilmeyen bir þekilde bir yuvaya eriþilmeye çalýþýldý'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kerem\OneDrive\Documents\GitHub\MailAI\E_Mail_AI\app.py", line 3, in <module>
+    from routes.auth_routes import auth_bp
+  File "C:\Users\kerem\OneDrive\Documents\GitHub\MailAI\E_Mail_AI\routes\auth_routes.py", line 9, in <module>
+    msal_app = msal_client.get_msal_app()
+  File "C:\Users\kerem\OneDrive\Documents\GitHub\MailAI\E_Mail_AI\auth\msal_client.py", line 15, in get_msal_app
+    return msal.ConfidentialClientApplication(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        CLIENT_ID,
+        ^^^^^^^^^^
+        authority=AUTHORTY,
+        ^^^^^^^^^^^^^^^^^^^
+        client_credential=CLIENT_SECRET
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\msal\application.py", line 645, in __init__
+    self.authority = Authority(
+                     ~~~~~~~~~^
+        authority_to_use,
+        ^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        oidc_authority_url=oidc_authority,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\msal\authority.py", line 79, in __init__
+    openid_config = tenant_discovery(
+        tenant_discovery_endpoint,
+        self._http_client)
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\msal\authority.py", line 210, in tenant_discovery
+    resp = http_client.get(tenant_discovery_endpoint, **kwargs)
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\msal\individual_cache.py", line 273, in wrapper
+    value = function(*args, **kwargs)
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\msal\throttled_http_client.py", line 99, in get
+    return NormalizedResponse(self.http_client.get(*args, **kwargs))
+                              ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 602, in get
+    return self.request("GET", url, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "C:\Users\kerem\AppData\Local\Programs\Python\Python313\Lib\site-packages\requests\adapters.py", line 677, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='login.microsoftonline.com', port=443): Max retries exceeded with url: /a79d2309-5562-4deb-b093-cc8560bc3215/v2.0/.well-known/openid-configuration (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001F43F76EFD0>: Failed to establish a new connection: [WinError 10013] Eriþim izinlerince izin verilmeyen bir þekilde bir yuvaya eriþilmeye çalýþýldý'))
