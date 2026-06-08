@@ -154,6 +154,7 @@ body {
 }
 
 .mail-row,
+.user-prompt,
 .assistant-box,
 .prompt-pill {
     border-radius: 8px;
@@ -195,6 +196,19 @@ body {
     font-size: 12px;
 }
 
+.user-prompt {
+    width: fit-content;
+    max-width: min(100%, 300px);
+    margin: 14px 0 0 auto;
+    padding: 12px 14px;
+    background: var(--brand);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.45;
+    box-shadow: 0 14px 28px rgba(229, 46, 34, 0.18);
+}
+
 .assistant-box {
     margin-top: 14px;
     padding: 17px;
@@ -219,8 +233,9 @@ body {
     width: fit-content;
     margin: 14px 0 0 auto;
     padding: 11px 13px;
-    background: var(--brand);
-    color: #ffffff;
+    border: 1px solid rgba(229, 46, 34, 0.22);
+    background: rgba(229, 46, 34, 0.1);
+    color: var(--brand-dark);
     font-size: 13px;
     font-weight: 800;
 }
@@ -272,6 +287,10 @@ body {
 
     .preview-card {
         padding: 18px;
+    }
+
+    .user-prompt {
+        max-width: 100%;
     }
 
     .product-logo {
