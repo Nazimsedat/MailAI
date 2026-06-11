@@ -40,9 +40,12 @@ body {
 }
 
 .detail-shell {
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
     width: min(100%, 1380px);
     margin: 0 auto;
-    padding: 30px 24px 36px;
+    padding: 22px 24px 24px;
 }
 
 .topbar {
@@ -199,14 +202,19 @@ body {
 
 .chat-container {
     display: flex;
-    min-height: calc(100vh - 236px);
+    flex: 1;
+    min-height: 0;
     flex-direction: column;
     overflow: hidden;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
 }
 
 .chat-header {
     padding: 18px 20px;
     border-bottom: 1px solid var(--line);
+    background: transparent;
     color: var(--brand-strong);
     font-weight: 800;
 }
@@ -291,17 +299,17 @@ body {
     gap: 10px;
     padding: 16px;
     border-top: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.02);
+    background: transparent;
 }
 
 .chat-input-area textarea {
     flex: 1;
     min-height: 54px;
     max-height: 140px;
-    resize: vertical;
+    resize: none;
     border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 13px 14px;
+    border-radius: 20px;
+    padding: 14px 16px;
     color: var(--ink);
     background: rgba(255, 255, 255, 0.04);
     outline: none;
@@ -316,6 +324,7 @@ body {
     align-self: flex-end;
     min-width: 104px;
     padding: 0 18px;
+    border-radius: 12px;
     cursor: pointer;
     background: linear-gradient(180deg, rgba(61, 99, 255, 1), rgba(46, 75, 204, 0.96));
     color: #ffffff;
@@ -334,13 +343,13 @@ body {
     }
 
     .chat-container {
-        min-height: 620px;
+        min-height: 0;
     }
 }
 
 @media (max-width: 640px) {
     .detail-shell {
-        padding: 20px 16px 24px;
+        padding: 16px 14px 18px;
     }
 
     .topbar {
