@@ -9,11 +9,10 @@
 <body>
     <main class="login-shell">
         <section class="hero-copy" aria-label="SisMail giriş alanı">
-            <img class="product-logo" src="{{ url_for('static', filename='img/sistekno/logo.svg') }}" alt="SisTekno">
-            <h1>Mailleriniz ile konuşun</h1>
+            <img class="product-logo" src="{{ url_for('static', filename='img/sistekno/SisMail.png') }}" alt="SisMail AI">
+            <h1>Kurumsal e-posta deneyimi, tek bir akışta.</h1>
             <p>
-                Gelen kutunuzu SisAI ile özetleyin, önemli mesajları yakalayın ve
-                e-postalarınıza doğal dilde soru sorun.
+                Maillerinizi tek bir akışta yönetin, kritik bilgileri hızla öne çıkarın ve yapay zeka destekli içgörülerle e-posta yönetimini devrimleştirin. SisMail ile gelen kutunuzun kontrolünü elinize alın.
             </p>
 
             <a class="microsoft-button" href="{{ url_for('auth.index') }}">
@@ -23,13 +22,10 @@
                     <span></span>
                     <span></span>
                 </span>
-                <span>Microsoft ile devam et</span>
+                <span>Microsoft ile giriş yap</span>
             </a>
 
-            <div class="micro-copy">
-                <span>Microsoft 365 ile güvenli giriş</span>
-                <span>Yerel SisAI desteği</span>
-            </div>
+           
         </section>
 
         <section class="preview-card" aria-label="SisMail önizleme">
@@ -41,23 +37,30 @@
 
             <div class="mail-row">
                 <div>
-                    <strong>Bugünün gelen kutusu</strong>
-                    <span>7 yeni mail içinde öne çıkan konu bulundu</span>
+                    <strong>Çalışma alanı</strong>
+                    <span>İş akışı, karanlık panel ve net aksiyonlar</span>
                 </div>
-                <b>Yeni</b>
+                <b>Canlı</b>
             </div>
 
             <div class="user-prompt">
-                Bugün gelen mailleri özetle
+                Bugünkü kritik mailleri özetle
             </div>
 
             <div class="assistant-box">
-                <small>Mail AI cevabı</small>
-                <p>Bugün gelen maillerde teklif onayı, toplantı planı ve ödeme hatırlatması öne çıkıyor. Öncelik: teklif onayına dönüş yapmak.</p>
+                <small>AI asistan</small>
+                <p>Öne çıkan mailler; toplantı onayı, teklif revizyonu ve müşteri dönüşü olarak gruplanır. Öncelik kartlarıyla hızlı karar verilir.</p>
             </div>
 
-            <div class="prompt-pill">Mail AI yazıyor...</div>
+            
         </section>
+
+        <footer class="login-footer" aria-label="SisTekno imza alanı">
+            <span>by</span>
+            <img src="{{ url_for('static', filename='img/sistekno/logo.svg') }}" alt="SisTekno">
+        </footer>
+
+        <div class="demo-badge" aria-label="Demo sürüm">demo v1.0</div>
     </main>
 </body>
 </html>

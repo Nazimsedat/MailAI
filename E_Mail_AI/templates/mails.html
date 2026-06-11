@@ -3,65 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SisTekno MailAI</title>
+    <title>SisMail</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mails.css') }}">
     <script>
-        document.documentElement.dataset.theme = localStorage.getItem("mailai-theme") || "light";
+        document.documentElement.dataset.theme = "dark";
+        localStorage.setItem("mailai-theme", "dark");
     </script>
 </head>
 <body>
-    <div class="layout">
-        <aside class="sidebar">
-            <div class="brand">
-                <img src="{{ url_for('static', filename='img/sistekno/logo.svg') }}" alt="SisTekno">
-                <span>MailAI</span>
+    <main class="workspace">
+        <header class="topbar">
+            <div class="brand-lockup">
+                <img src="{{ url_for('static', filename='img/sistekno/SisMail.png') }}" alt="SisMail">
             </div>
+        </header>
 
-            <nav class="sidebar-nav" aria-label="MailAI menü">
-                <button class="active" type="button">Gelen Kutusu</button>
-                <button type="button">Önemli</button>
-                <button id="settingsToggle" type="button">Ayarlar</button>
-            </nav>
-        </aside>
-
-        <main class="ai-panel">
-            <section class="settings-panel" id="settingsPanel" aria-label="Ayarlar">
-                <div>
-                    <p class="section-kicker">Ayarlar</p>
-                    <h2>Görünüm</h2>
-                </div>
-
-                <label class="theme-switch" for="darkThemeToggle">
-                    <span>
-                        <strong>Karanlık tema</strong>
-                        <small>MailAI arayüzünü koyu zeminde kullan.</small>
-                    </span>
-                    <input id="darkThemeToggle" type="checkbox">
-                </label>
-            </section>
-
-            <div class="ai-header">
-                <div>
-                    <p class="section-kicker">Yapay zeka analizi</p>
-                    <h1>Gelen kutusu özeti</h1>
-                </div>
-                <form method="POST">
-                    <input type="hidden" name="action" value="summary">
-                    <button type="submit" class="ai-btn">Otomatik Özetle</button>
-                </form>
-            </div>
-
-            <div class="ai-content">
-                {% if AI_prompt %}
-                    {{ AI_prompt|safe }}
-                {% else %}
-                    <p>Henüz analiz yapılmadı.</p>
-                {% endif %}
-            </div>
-
-            <section class="chat-container">
-                <div class="chat-header">MailAI Asistan</div>
-
+        <section class="chat-shell">
+            <div class="chat-container">
                 <div class="chat-messages">
                     {% if mails_chat_history %}
                         {% for msg in mails_chat_history %}
@@ -72,60 +30,41 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        <p class="chat-empty">Gelen mailler hakkında soru sorabilirsin.</p>
+                        <div class="chat-empty-card">
+                            <p class="section-kicker">Başlayın</p>
+                            <h2>Mailler hakkında soru sorun</h2>
+                            <p>Örnek: bugün öne çıkan müşteriler, acil aksiyonlar veya toplantı hatırlatmaları.</p>
+                        </div>
                     {% endif %}
                 </div>
 
                 <form method="POST" class="chat-input-area">
                     <input type="hidden" name="action" value="mails_chat">
                     <textarea name="user_message"
-                              placeholder="Gelen mailler hakkında soru sor..."
+                              placeholder="Mailler hakkında soru sor..."
                               required></textarea>
                     <button type="submit">Gönder</button>
                 </form>
-            </section>
-        </main>
-
-        <aside class="mailbox">
-            <div class="mailbox-header">
-                <p class="section-kicker">Microsoft Mail</p>
-                <h2>Mailbox</h2>
             </div>
 
-            <div class="mail-list">
-                {% for mail in messages %}
-                    <article class="mail-item">
-                        <div class="mail-from">{{ mail.from }}</div>
-                        <div class="mail-subject">
-                            <a href="{{ url_for('mail.mail_detail', mail_id=mail.id) }}">
-                                {{ mail.subject }}
-                            </a>
-                        </div>
-                        <div class="mail-date">{{ mail.received }}</div>
-                    </article>
-                {% endfor %}
-            </div>
-        </aside>
-    </div>
+        </section>
+    </main>
 
     <script>
-        const settingsToggle = document.getElementById("settingsToggle");
-        const settingsPanel = document.getElementById("settingsPanel");
-        const darkThemeToggle = document.getElementById("darkThemeToggle");
-        const savedTheme = localStorage.getItem("mailai-theme") || "light";
+        const chatInputForm = document.querySelector(".chat-input-area");
+        const chatTextarea = chatInputForm ? chatInputForm.querySelector("textarea") : null;
 
-        darkThemeToggle.checked = savedTheme === "dark";
+        if (chatTextarea) {
+            chatTextarea.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
 
-        settingsToggle.addEventListener("click", () => {
-            settingsPanel.classList.toggle("open");
-            settingsToggle.classList.toggle("active");
-        });
-
-        darkThemeToggle.addEventListener("change", () => {
-            const nextTheme = darkThemeToggle.checked ? "dark" : "light";
-            document.documentElement.dataset.theme = nextTheme;
-            localStorage.setItem("mailai-theme", nextTheme);
-        });
+                    if (chatInputForm && chatInputForm.checkValidity()) {
+                        chatInputForm.requestSubmit();
+                    }
+                }
+            });
+        }
 
         function scrollChatToBottom(chatMessages) {
             chatMessages.scrollTop = chatMessages.scrollHeight;

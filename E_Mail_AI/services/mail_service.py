@@ -1,5 +1,7 @@
 import token
 import requests
+import json
+from bs4 import BeautifulSoup
 
 def get_all_mails(token):
       headers = {
@@ -28,7 +30,8 @@ def get_all_mails(token):
 
 
 def AI_Prompt_mail(token):
-      url = "https://graph.microsoft.com/v1.0/me/messages?$select=subject,from,receivedDateTime,body&$top=50"
+      url = "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$select=subject,from,receivedDateTime,bodyPreview&$top=50"
+  
       headers = {
         "Authorization": f"Bearer {token}"
       }
@@ -42,10 +45,27 @@ def AI_Prompt_mail(token):
             mails.append({
                 "from": mail.get("from", {}).get("emailAddress", {}).get("address"),
                 "subject": mail.get("subject"),
-                "body": mail.get("body", {}).get("content"),
+                "body": mail.get("bodyPreview"),
                 "received": mail.get("receivedDateTime")
             })
-      return mails
-      print(mails)
 
+      cleanMail = []
 
+      for mail in mails:
+            soup = BeautifulSoup(mail["body"], "html.parser")
+
+            for tag in soup(["script", "style","img"]):
+                  tag.decompose()
+            
+            text = soup.get_text(" ", strip=True)
+
+            cleanMail.append({
+                  "from": mail["from"],
+                  "subject": mail["subject"],
+                  "body": text,
+                  "received": mail["received"]
+            })
+
+            print(json.dumps(cleanMail, indent=4, ensure_ascii=False))
+      return cleanMail
+           
